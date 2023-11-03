@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<meta charset='utf-8'>
+<html>
+name-page=<input id="id_name" value="mem"><br>
+adr-cell=<input id="id_adr" value="1,1">(1/x,y/empty)<br> 
+stroki<input id="id_str" value="1,3">(or 11-33 diapazon strok)<br> 
+<hr>
+<textarea id='te1' cols="80" rows="20"></textarea>
+<hr>
+<button id='bu1' onclick="aa()">load_A</button>
+<button id='bu2' onclick="ss()">load_str</button>
+<button id='bu3' onclick="zz()">save_loc</button>
+<script>
+ if(window['g_api']!=undefined)alert('g_api in use!');g_api='error';//global 
+var g_ss='https://script.google.com/macros/s/AKfycbyYNHGzoLzoMb1MdRaKvtNPiNrAqkHZOn6DgSSycO5C3r1KSegwRwiV7WqbyJmSdgpa/exec';
+
+//при загрузке данных через скрипт или запакованым в png нет кроссдоменных ограничений!
+function run_js(vPathScript){var sc;
+  sc=document.createElement('script');
+ sc.src=''+vPathScript; document.head.appendChild(sc);
+ sc.onerror=function(){console.log('нет файла='+vPathScript+': error in run_js');}
+ sc.onload=function(){
+  if(!this.executed){ 
+   this.executed=true;
+   if(1)setTimeout(ok_js,0);
+  }
+ }
+ sc.onreadystatechange=function(){var self=this;
+  if(this.readyState == "complete" || this.readyState == "loaded"){
+   setTimeout(function(){self.onload()}, 0);
+  }
+ }
+}
+
+function zz(){ var t,i,aa;
+if(!isLocalStorageAvailable())return;
+ localStorage.clear(); 
+ t=document.getElementById('te1').value; aa=t.split('\n');
+ try {
+  for(i=0;i< aa.length;i++) localStorage.setItem('msg'+i, aa[i]);
+ } 
+ catch (e) {
+  if (e == QUOTA_EXCEEDED_ERR) alert('Превышен лимит');
+ }
+}
+
+function isLocalStorageAvailable() {
+   try {
+     return 'localStorage' in window && window['localStorage'] !== null;
+   } catch (e) { return false;}
+}
+function ok_js(){var t1,t2;
+ document.getElementById('te1').value=g_api;
+ document.getElementById('bu1').disabled=false;
+ document.getElementById('bu2').disabled=false;
+}
+
+function aa(){var name;
+ document.getElementById('bu1').disabled=true;
+ document.getElementById('bu2').disabled=true;
+ name=document.getElementById('id_name').value;
+ run_js(g_ss+'?name='+name+'&adr=1');
+}
+function ss(){var name,adr,str;
+ document.getElementById('bu1').disabled=true;
+ document.getElementById('bu2').disabled=true;
+ name=document.getElementById('id_name').value;
+ adr=document.getElementById('id_adr').value;
+ str=document.getElementById('id_str').value;
+ run_js(g_ss+'?name='+name+'&adr='+adr+'&str='+str);
+}
+</script>
+</html>

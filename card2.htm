@@ -1,0 +1,84 @@
+<!DOCTYPE html> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body> 
+<noscript>
+ Для работы меню включите скрипты! <br>
+ please turn on javascripts!
+</noscript>
+<style>
+@import url('bootstrap.min.css');
+
+a { outline: none; }
+ul li a[aria-controls="profile"]:hover{ color:red;}
+.ot2 {margin: 2px 1px;}
+i {color: red;}
+
+</style>
+
+<script src='jquery.min.js'></script>
+<script src='bootstrap.min.js'></script>
+<script src='vue.js'></script>
+<script src='en-ru-dict.js'></script>
+<script>
+ if(window['g_api']!=undefined)console.log('g_api in use!');g_api='error';//global 
+g_name='tem';//global 
+g_page='';//global
+</script> 
+
+
+ 
+<div class="panel-group">
+
+
+   <div class="panel panel-success">
+    <div  class="panel-body">
+<h3><b id="id_p1">слово - перевод</b> <span id="id_p2" class="label label-primary">транскрипция 3 шт</span></h3>
+    </div>
+   </div>
+
+   <div class="panel panel-primary">
+    <div  class="panel-body">
+   <div class="row">
+	   <div class="col-sm-6 col-md-4">
+		   
+		<img class="media-object" src="card2.jpeg" width="100%" >
+	   </div>
+
+       <div class="col-sm-6 col-md-8" >
+        <h3 id="id_p3" >ассоциация</h3>
+        <h4 id="id_p5" >dop</h4>
+       </div>
+       
+   </div>  
+     </div>
+   </div>   
+   
+  
+   <div class="panel panel-primary">
+    <div id="id_p6" class="panel-body">
+доп асоц
+    </div>
+   </div>    
+   <div class="panel panel-primary">
+    <div id="id_p7" class="panel-body">
+примеры
+    </div>
+   </div>    
+ </div>
+</div>
+<script>
+g_api=`a horse - лошадь|[hɔs] хос, хорсе|*лошадь пела в ХОРе СЕгодня ХОРошо и краСиво|card2.jpeg|лошадь; кавалерия; конница; рама; станок; козлы; конный; конский; лошадиный; садиться на лошадь; ехать верхом;|доп ассоц|horses die from work, she is scary as a horse|\n`;
+
+var ms=g_api.split('|');	
+put_h('id_p1',ms[0]);
+put_h('id_p2',ms[1]);
+put_h('id_p3',zv_to_kr(ms[2]));
+put_h('id_p5','доп.перевод: '+ms[4]);
+put_h('id_p6','доп.ассоц: '+ms[5]);
+put_h('id_p7','примеры: '+ms[6]);
+	
+
+</script>
+
+
+</body>

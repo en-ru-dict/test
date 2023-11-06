@@ -1,0 +1,190 @@
+<!DOCTYPE html> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body> 
+<noscript>
+ Для работы меню включите скрипты! <br>
+ please turn on javascripts!
+</noscript>
+<style>
+@import url('bootstrap.min.css');
+
+a { outline: none; }
+ul li a[aria-controls="profile"]:hover{ color:red;}
+.ot2 {margin: 2px 1px;}
+i {color: red;}
+</style>
+
+<script src='jquery.min.js'></script>
+<script src='bootstrap.min.js'></script>
+<script src='vue.js'></script>
+<script src='en-ru-dict.js'></script>
+<script>
+ if(window['g_api']!=undefined)console.log('g_api in use!');g_api='error';//global 
+g_name='tem';//global 
+g_page='';//global
+</script> 
+
+  <!-- Навигация -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="active"><a href="#tem" aria-controls="tem" role="tab" data-toggle="tab">главная</a></li>
+    <li><a href="#tem1" aria-controls="tem1" role="tab" data-toggle="tab" title="tem1" onclick="loadLoc(1);">списки</a></li>
+    <li><a href="#tem2" aria-controls="tem2" role="tab" data-toggle="tab" title="tem2" onclick="start_card();">карточки</a></li>
+  </ul>
+ 
+<!-- Содержимое вкладок -->
+<div class="tab-content" >
+
+ <div role="tabpanel" class="tab-pane fade in active" id="tem" align="center">
+   <div class="panel panel-primary">
+	<div class="panel-heading"><h3 >ТАБЛИЦА ПО ТЕМАМ (tem)</h3></div>
+   </div>
+
+<p>
+Проект для изучения английского языка по ассоциациям. Открытый. Бесплатный.<br>
+Использование в комерческих целях запрещено. Помощь в развитии сайта и БД приветствуется.<br>
+Пишите в телеграм чат EnglSpaceChat
+</p>
+<hr>
+<textarea id='id_text1' cols="80" rows="20"></textarea>
+<hr>
+<script>
+g_page="";
+load_A();
+</script>
+ </div>
+
+
+ <div role="tabpanel" class="tab-pane fade" id="tem1" >
+<br>
+  <div class="panel-group">
+
+   <div class="panel panel-primary">
+    <div class="panel-body">
+      <button type="button" class="btn btn-primary btn-md ot2" onclick="loadLoc(1);">1</button>
+      <button type="button" class="btn btn-primary btn-md ot2" onclick="loadLoc(2);">2</button>
+      <button type="button" class="btn btn-primary btn-md ot2" onclick="loadLoc(3);">3</button>
+      <button type="button" class="btn btn-primary btn-md ot2" onclick="loadLoc(4);">4</button>
+      <button type="button" class="btn btn-primary btn-md ot2">5</button>
+      <button type="button" class="btn btn-primary btn-md ot2">6</button>
+      <button type="button" class="btn btn-primary btn-md ot2">7</button>
+      ||
+      <button type="button" class="btn btn-success btn-md ot2" onclick="load_A();">Загрузить полный список из гугл таблицы</button>
+      <button type="button" class="btn btn-danger btn-md ot2" onclick="saveLoc();">Запомнить юзер список локально</button>
+
+      
+    </div>
+   </div> 
+
+   <div class="panel panel-success">
+<div class="panel-heading">Текущая страница=<span id="id_tek_page">?</span></div>
+
+    <div class="panel-body">
+     <div id="app" >
+      <input v-model="newTodo" v-on:keyup.enter="addTodo" style="width:500px">
+      <p></p>
+      <ul>
+        <li v-for="todo in todos" class="alert alert-info" role="alert">
+          <span>{{ todo.text }}</span>
+          <button type="button" class="btn btn-danger btn-xs" v-on:click="removeTodo($index)">[X]</button>
+        </li>
+      </ul>
+     </div>
+    </div>
+   
+ </div>
+ 
+ </div>
+</div>
+<script>
+vu=new Vue({
+  el: '#app',
+  data: {
+    newTodo: '',
+    todos: [ { text: 'список слов, крестик удалить' }]
+  },
+
+  methods: {
+    addTodo: function () {
+      var text = this.newTodo.trim()
+      if (text) {
+        this.todos.push({ text: text })
+        this.newTodo = ''
+   //     saveLoc(this.todos);
+      }
+    },
+    removeTodo: function (index) {
+      this.todos.splice(index, 1);
+    //  saveLoc(this.todos);
+    }
+
+  }
+})
+
+</script>
+
+
+
+
+<div role="tabpanel" class="tab-pane fade" id="tem2">
+  <div class="panel-group">
+
+   <div class="panel panel-primary">
+	<div class="panel-heading"><h3 id="id_tek_word">?</h3></div>
+    <div class="panel-body">
+      <button type="button" class="btn btn-primary btn-md ot2" onclick="start_card();">HOME</button>
+      ||
+      <button type="button" class="btn btn-success btn-md ot2" onclick="load_card(next_num_word());">NEXT</button>
+      ||
+      <button type="button" class="btn btn-danger btn-md ot2" onclick="">EDIT</button>
+      |||| 
+      <button type="button" class="btn btn-info btn-md ot2">
+      Текущая страница=<span id="id_page">?</span> Текущее слово=<span id="id_word">?</span> 
+      </button>
+    </div>
+   </div> 
+
+   <div class="panel panel-success">
+    <div  class="panel-body">
+     <h3><b id="id_p0">слово - перевод</b> <span id="id_p1" class="label label-primary">транскрипция 3 шт</span></h3>
+    </div>
+   </div>
+
+   <div class="panel panel-primary">
+    <div  class="panel-body">
+     <div class="row">
+	   <div class="col-sm-6 col-md-4">
+		<img id="id_p3" src="" width="100%" >
+	   </div>
+       <div class="col-sm-6 col-md-8" >
+        <h3 id="id_p2" >ассоциация</h3>
+        <h4 id="id_p4" >dop</h4>
+       </div>
+      </div>  
+     </div>
+   </div>   
+ 
+   <div class="panel panel-primary">
+    <div id="id_p5" class="panel-body">
+доп асоц
+    </div>
+   </div>    
+ 
+   <div class="panel panel-primary">
+    <div id="id_p6" class="panel-body">
+примеры
+    </div>
+   </div>    
+
+ </div>
+</div>
+   
+ </div>
+</div>
+</div>
+</div>
+<script>
+//g_api=`a horse - лошадь|[hɔs] хос, хорсе|*лошадь пела в ХОРе СЕгодня ХОРошо и краСиво|card2.jpeg|лошадь; кавалерия; конница; рама; станок; козлы; конный; конский; лошадиный; садиться на лошадь; ехать верхом;|доп ассоц|horses die from work, she is scary as a horse|\n`;
+</script>
+
+
+</body>

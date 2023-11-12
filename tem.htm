@@ -20,21 +20,21 @@ i {color: red;}
 <script src='en-ru-dict.js'></script>
 <script>
  if(window['g_api']!=undefined)console.log('g_api in use!');g_api='error';//global 
-g_name='tem';//global 
-g_page='';//global
+g_name='?';//global 
+g_page='?';//global
 </script> 
 
   <!-- Навигация -->
   <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#tem" aria-controls="tem" role="tab" data-toggle="tab">главная</a></li>
-    <li><a href="#tem1" aria-controls="tem1" role="tab" data-toggle="tab" title="tem1" onclick="loadLoc(1);">списки</a></li>
-    <li><a href="#tem2" aria-controls="tem2" role="tab" data-toggle="tab" title="tem2" onclick="start_card();">карточки</a></li>
+    <li><a href="#tem1" aria-controls="tem1" role="tab" data-toggle="tab" title="" onclick="load_vu_from_Loc(0);">списки</a></li>
+    <li><a href="#tem2" aria-controls="tem2" role="tab" data-toggle="tab" title="" onclick="start_card();">карточки</a></li>
   </ul>
  
 <!-- Содержимое вкладок -->
 <div class="tab-content" >
 
- <div role="tabpanel" class="tab-pane fade in active" id="tem" align="center">
+<div role="tabpanel" class="tab-pane fade in active" id="tem" align="center">
    <div class="panel panel-primary">
 	<div class="panel-heading"><h3 >ТАБЛИЦА ПО ТЕМАМ (tem)</h3></div>
    </div>
@@ -48,35 +48,36 @@ g_page='';//global
 <textarea id='id_text1' cols="80" rows="20"></textarea>
 <hr>
 <script>
-g_page="";
-load_A();
+ put_h('id_text1','Loading...');
+ g_name='tem';g_page='';load_A(0);//содержание по темам
 </script>
- </div>
+</div>
 
 
- <div role="tabpanel" class="tab-pane fade" id="tem1" >
+<div role="tabpanel" class="tab-pane fade" id="tem1" >
 <br>
   <div class="panel-group">
 
    <div class="panel panel-primary">
     <div class="panel-body">
-      <button type="button" class="btn btn-primary btn-md ot2" onclick="loadLoc(1);">1</button>
-      <button type="button" class="btn btn-primary btn-md ot2" onclick="loadLoc(2);">2</button>
-      <button type="button" class="btn btn-primary btn-md ot2" onclick="loadLoc(3);">3</button>
-      <button type="button" class="btn btn-primary btn-md ot2" onclick="loadLoc(4);">4</button>
-      <button type="button" class="btn btn-primary btn-md ot2">5</button>
-      <button type="button" class="btn btn-primary btn-md ot2">6</button>
-      <button type="button" class="btn btn-primary btn-md ot2">7</button>
+      <button type="button" class="btn btn-primary btn-md ot2" onclick="load_vu_from_Loc(1);">1</button>
+      <button type="button" class="btn btn-primary btn-md ot2" onclick="load_vu_from_Loc(2);">2</button>
+      <button type="button" class="btn btn-primary btn-md ot2" onclick="load_vu_from_Loc(3);">3</button>
+      <button type="button" class="btn btn-primary btn-md ot2" onclick="load_vu_from_Loc(4);">4</button>
+      <button type="button" class="btn btn-primary btn-md ot2" onclick="load_vu_from_Loc(5);">5</button>
+      <button type="button" class="btn btn-primary btn-md ot2" onclick="load_vu_from_Loc(6);">6</button>
+      <button type="button" class="btn btn-primary btn-md ot2" onclick="load_vu_from_Loc(7);">7</button>
       ||
-      <button type="button" class="btn btn-success btn-md ot2" onclick="load_A();">Загрузить полный список из гугл таблицы</button>
-      <button type="button" class="btn btn-danger btn-md ot2" onclick="saveLoc();">Запомнить юзер список локально</button>
+      <button type="button" class="btn btn-success btn-md ot2" onclick="load_A(0);">Загрузить полный список из гугл таблицы</button>
+      <button type="button" class="btn btn-danger btn-md ot2" onclick="save_vu_to_Loc();">Запомнить юзер список локально</button>
+      <button type="button" class="btn btn-danger btn-md ot2" onclick="del_Loc();">Очистить LocalStore</button>
 
       
     </div>
    </div> 
 
    <div class="panel panel-success">
-<div class="panel-heading">Текущая страница=<span id="id_tek_page">?</span></div>
+<div class="panel-heading">Текущий список=<span id="id_list0">?</span></div>
 
     <div class="panel-body">
      <div id="app" >
@@ -100,7 +101,7 @@ vu=new Vue({
   el: '#app',
   data: {
     newTodo: '',
-    todos: [ { text: 'список слов, крестик удалить' }]
+    todos: [ { text: 'номер| слово - перевод, крестик удалить' }]
   },
 
   methods: {
@@ -109,12 +110,18 @@ vu=new Vue({
       if (text) {
         this.todos.push({ text: text })
         this.newTodo = ''
-   //     saveLoc(this.todos);
+        //save_vu_to_Loc()
       }
     },
-    removeTodo: function (index) {
-      this.todos.splice(index, 1);
-    //  saveLoc(this.todos);
+    removeTodo: function (index) {var s='',ms;
+	 s=''+this.todos[index].text; ms=s.split('|');
+	 if(len(ms)>1){
+		 s=g_name+g_page+'_'+ms[0];
+		 console.log('del card='+s);
+		 del_LocElem(s);//удаляем карточку если есть
+	 }
+     this.todos.splice(index, 1);
+     //save_vu_to_Loc()
     }
 
   }
@@ -123,22 +130,22 @@ vu=new Vue({
 </script>
 
 
-
-
 <div role="tabpanel" class="tab-pane fade" id="tem2">
   <div class="panel-group">
 
    <div class="panel panel-primary">
-	<div class="panel-heading"><h3 id="id_tek_word">?</h3></div>
+	<div class="panel-heading"><h5 id="id_tek_word">Загружаем карточки..</h5></div>
     <div class="panel-body">
-      <button type="button" class="btn btn-primary btn-md ot2" onclick="start_card();">HOME</button>
+      <button id="id_but1" type="button" class="btn btn-primary btn-md ot2" onclick="start_card();">HOME</button>
+       ||
+      <button id="id_but2" type="button" class="btn btn-success btn-md ot2" onclick="prev_word();">PREV</button>
       ||
-      <button type="button" class="btn btn-success btn-md ot2" onclick="load_card(next_num_word());">NEXT</button>
+      <button id="id_but3" type="button" class="btn btn-success btn-md ot2" onclick="next_word();">NEXT</button>
       ||
       <button type="button" class="btn btn-danger btn-md ot2" onclick="">EDIT</button>
       |||| 
       <button type="button" class="btn btn-info btn-md ot2">
-      Текущая страница=<span id="id_page">?</span> Текущее слово=<span id="id_word">?</span> 
+      Текущий список=<span id="id_list">?</span> Текущий номер слова=<span id="id_word">?</span> 
       </button>
     </div>
    </div> 
@@ -182,9 +189,6 @@ vu=new Vue({
 </div>
 </div>
 </div>
-<script>
-//g_api=`a horse - лошадь|[hɔs] хос, хорсе|*лошадь пела в ХОРе СЕгодня ХОРошо и краСиво|card2.jpeg|лошадь; кавалерия; конница; рама; станок; козлы; конный; конский; лошадиный; садиться на лошадь; ехать верхом;|доп ассоц|horses die from work, she is scary as a horse|\n`;
-</script>
 
 
 </body>
